@@ -23,7 +23,7 @@ void mostrarTablero(){
             if(tablero[i][j] == NULL){
                 printf(" |");
             }
-            else if(tablero[i][j] == ((void *)1)){
+            else if(tablero[i][j] == ((void *)1)){ 
                 printf(" X|");
             }
             else if(tablero[i][j] == ((void *)2)){
@@ -39,4 +39,54 @@ void borrarTablero(){
         free(tablero[i]);
     }
     free(tablero);
+}
+
+int barcohelp(int x, int y, int tamanoBarco, int orientacion, int tamanoTablero) {
+    if (orientacion == 0) {
+        if (y + tamanoBarco > tamanoTablero){
+            return 0;
+        }
+        for (int j = 0; j < tamanoBarco; j++) {
+            if (tablero[x][y + j] != NULL){
+                return 0;
+            }
+        } 
+        else {
+        if (x + tamanoBarco > tamanoTablero){
+            return 0;
+        }
+        for (int j = 0; j < tamanoBarco; j++) {
+            if (tablero[x + j][y] != NULL){
+                return 0;
+            }
+        }
+    }
+    return 1;
+    }
+}
+
+void colocarBarcos(int tamano) {
+    srand(time(NULL)); 
+
+    int barcos[] = {2, 3, 4, 5}; 
+    int numBarcos = sizeof(barcos) / sizeof(barcos[0]);
+
+    for (int i = 0; i < numBarcos; i++) {
+        int colocado = 0;
+        while (!colocado) {
+            int orientacion = rand() % 2; 
+            int x = rand() % tamano;
+            int y = rand() % tamano;
+            if (barcohelp(x, y, barcos[i], orientacion, tamano)) {
+                for (int j = 0; j < barcos[i]; j++) {
+                    if (orientacion == 0) {
+                        tablero[x][y + j] = (void *)3;
+                    } else {
+                        tablero[x + j][y] = (void *)3;
+                    }
+                }
+                colocado = 1;
+            }
+        }
+    }
 }
