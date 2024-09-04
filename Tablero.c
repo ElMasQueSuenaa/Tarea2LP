@@ -66,10 +66,20 @@ int barcohelp(int x, int y, int tamanoBarco, int orientacion, int tamanoTablero)
 }
 
 void colocarBarcos(int tamano) {
-    srand(time(NULL)); 
-
-    int barcos[] = {2, 3, 4, 5}; 
-    int numBarcos = sizeof(barcos) / sizeof(barcos[0]);
+    srand(time(NULL));
+    int numBarcos;
+    if(tamano == 11){
+        int barcos[] = {2, 2, 3, 4, 5};
+        numBarcos = 5;
+    }
+    else if(tamano == 17){
+        int barcos[] = {2, 2, 2, 3, 3, 4, 5};
+        numBarcos = 7;
+    }
+    else if(tamano == 21){
+        int barcos[] = {2, 2, 2, 3, 3, 4, 4, 5, 5};
+        numBarcos = 9;
+    }
 
     for (int i = 0; i < numBarcos; i++) {
         int colocado = 0;

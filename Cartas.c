@@ -50,8 +50,11 @@ void usarCarta() {
         printf("Carta no disponible\n");
         return;
     }
-    printf("Ingrese las coordenadas x e y: ");
-    scanf("%d %d", &x, &y);
+    printf("Selecciona las coordenadas x e y:\n");
+    printf("X: ");
+    scanf("%d", &x);
+    printf("Y: ");
+    scanf("%d", &y);
     void *(*funcionCarta)(int, int) = Cartas.carta[cartaSeleccionada - 1];
     void *nuevaCarta = funcionCarta(x, y); 
     for (int i = cartaSeleccionada - 1; i < Cartas.disponibles - 1; i++) {
