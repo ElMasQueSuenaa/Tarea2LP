@@ -12,6 +12,7 @@ void inicializarMazo();
 void mostrarMazo();
 void usarCarta();
 
+bool verificarBarcosRestantes(int tamano);
 void * disparoSimple(int x, int y);
 void * disparoGrande(int x, int y);
 void * disparoLineal(int x, int y);

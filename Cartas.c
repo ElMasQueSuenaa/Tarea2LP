@@ -19,22 +19,22 @@ void mostrarMazo(){
     printf("Cartas disponibles: \n");
     for(int i = 0; i<Cartas.disponibles; i++){
         if(Cartas.carta[i] == disparoSimple){
-            printf("Disparo simple\n");
+            printf(" Disparo simple |");
         }
         else if(Cartas.carta[i] == disparoGrande){
-            printf("Disparo grande\n");
+            printf(" Disparo grande |");
         }
         else if(Cartas.carta[i] == disparoLineal){
-            printf("Disparo lineal\n");
+            printf(" Disparo lineal |");
         }
         else if(Cartas.carta[i] == disparoRadar){
-            printf("Disparo radar\n");
+            printf(" Disparo radar |");
         }
         else if(Cartas.carta[i] == disparo500KG){
-            printf("Disparo 500KG\n");
+            printf(" Disparo 500KG |");
         }
     }
-
+    printf("\n");
 }
 
 void usarCarta() {
@@ -67,20 +67,37 @@ void usarCarta() {
     mostrarMazo();
 }
 
+bool verificarBarcosRestantes(int tamano) {
+    for (int i = 0; i < tamano; i++) {
+        for (int j = 0; j < tamano; j++) {
+            if (tablero[i][j] == (void *)3) { 
+                return true;  // Hay barcos restantes
+            }
+        }
+    }
+    return false;  // No quedan barcos
+}
+
 void *disparoSimple(int x, int y) {
-    if (x < 0 || y < 0 || x >= tamano || y >= tamano) {
+    bool indicador;
+    if (x < 0 || y < 0 || x > tamano || y > tamano) {
         printf("Coordenadas fuera de los límites.\n");
         return NULL;
     }
 
     if (tablero[x][y] == NULL) {
         tablero[x][y] = (void *)1; 
-        printf("Disparo simple en (%d, %d): MISS!\n", x, y);
+        printf("MISS!\n");
     } else if (tablero[x][y] == (void *)3) {
         tablero[x][y] = (void *)2;
-        printf("Disparo simple en (%d, %d): HIT!\n", x, y);
+        printf("HIT!\n", x, y);
     } else if (tablero[x][y] == (void *)1 || tablero[x][y] == (void *)2) {
-        printf("Disparo simple en (%d, %d): Ya se ha disparado aquí antes.\n", x, y);
+        printf("Ya se ha disparado aquí antes, perdiste el turno.\n", x, y);
+    }
+    indicador = verificarBarcosRestantes(tamano);
+    if (indicador == false) {
+        printf("TODOS LOS BARCOS DESTRUIDOS , DEFENZA EXITOSA!\n");
+        return NULL;
     }
     int probabilidad = rand() % 100;
     if(probabilidad < 65){
@@ -94,5 +111,193 @@ void *disparoSimple(int x, int y) {
     }
     else{
         return disparoRadar;
+    }
+}
+
+void *disparoGrande(int x, int y){
+    bool temp = false;
+    bool indicador;
+    if(x < 0 || y < 0 || x > tamano || y > tamano){
+        printf("Coordenadas fuera de los límites.\n");
+        return NULL;
+    }
+    for(int i = x-1; i<=x+1; i++){
+        for(int j = y-1; j<=y+1; j++){
+            if(i >= 0 && j>=0 && i<=tamano && j<=tamano){
+                if(tablero[i][j] == NULL){
+                    tablero[i][j] = (void *)1;
+                }
+                else if(tablero[i][j] == (void *)3){
+                    tablero[i][j] = (void *)2;
+                    temp = true;
+                }
+            }
+        }
+    }
+    if(temp == true){
+        printf("HIT!\n")
+    }
+    else{
+        printf("MISS!\n");
+    }
+    indicador = verificarBarcosRestantes(tamano);
+    if (indicador == false) {
+        printf("TODOS LOS BARCOS DESTRUIDOS , DEFENZA EXITOSA!\n");
+        return NULL;
+    }
+    int probabilidad = rand() % 100;
+    if(probabilidad < 80){
+        return disparoSimple;
+    }
+    else if(probabilidad < 83){
+        return disparoGrande;
+    }
+    else if(probabilidad < 93){
+        return disparoLineal;
+    }
+    else if(probabilidad < 98){
+        return disparoRadar;
+    }
+    else{
+        return disparo500KG;
+    }
+}
+
+void *disparoLineal(int x, int y){
+    bool temp = false;
+    bool indicador;
+    if(x < 0 || y < 0 || x > tamano || y > tamano){
+        printf("Coordenadas fuera de los límites.\n");
+        return NULL;
+    }
+    while(temp != true){
+        printf("Ingrese la orientación (0 para horizontal, 1 para vertical): ");
+        scanf("%d", &orientacion);
+        if(orientacion == 0 || orientacion == 1){
+            temp = true;
+        }
+        else{
+            printf("Orientación inválida\n");
+        }
+    }
+    if(orientacion == 0){
+        for(int i = y-2; i<=y+2; i++){
+            if(i >= 0 && i <= tamano){
+                if(tablero[x][i] == NULL){
+                    tablero[x][i] = (void *)1;
+                }
+                else if(tablero[x][i] == (void *)3){
+                    tablero[x][i] = (void *)2;
+                    printf("HIT! en (%d, %d)\n", x, i);
+                }
+            }
+        }
+    }
+    else{
+        for(int i = x-2; i<=x+2; i++){
+            if(i >= 0 && i <= tamano){
+                if(tablero[i][y] == NULL){
+                    tablero[i][y] = (void *)1;
+                }
+                else if(tablero[i][y] == (void *)3){
+                    tablero[i][y] = (void *)2;
+                    printf("HIT! en (%d, %d)\n", i, y);
+                }
+            }
+        }
+    }
+    indicador = verificarBarcosRestantes(tamano);
+    if (indicador == false) {
+        printf("TODOS LOS BARCOS DESTRUIDOS , DEFENZA EXITOSA!\n");
+        return NULL;
+    }
+    int probabilidad = rand() % 100;
+    if(probabilidad < 85){
+        return disparoSimple;
+    }
+    else if(probabilidad < 90){
+        return disparoGrande;
+    }
+    else if(probabilidad < 92){
+        return disparoLineal;
+    }
+    else if(probabilidad < 98){
+        return disparoRadar;
+    }
+    else{
+        return disparo500KG;
+    }
+}
+
+void* disparoRadar(int x, int y){
+    bool indicador;
+    bool temp = false; 
+    if(x < 0 || y < 0 || x > tamano || y > tamano){
+        printf("Coordenadas fuera de los límites.\n");
+        return NULL;
+    }
+    for(int i = x-2; i<x+2; i++){
+        for(int j = y-2; i<y+2; j++){
+            if(i >= 0 && j >= 0 && i <= tamano && j <= tamano){
+                if(tablero[i][j] == (void *)3){
+                    temp = true;
+                }    
+            }
+        }
+    }
+    if(temp == true){
+        printf("Barco encontrado en las cercanías\n");
+    }
+    else{
+        printf("No se encontraron barcos en las cercanías\n");
+    }
+    indicador = verificarBarcosRestantes(tamano);
+    if (indicador == false) {
+        printf("TODOS LOS BARCOS DESTRUIDOS , DEFENZA EXITOSA!\n");
+        return NULL;
+    }
+    int probabilidad = rand() % 100;
+    if(probabilidad < 75){
+        return disparoSimple;
+    }
+    else if(probabilidad < 90){
+        return disparoGrande;
+    }
+    else if(probabilidad < 95){
+        return disparoLineal;
+    }
+    else if(probabilidad < 97){
+        return disparoRadar;
+    }
+    else{
+        return disparo500KG;
+    }
+}
+
+void* disparo500KG(int x, int y){
+    bool temp = false;
+    bool indicador;
+    if(x < 0 || y < 0 || x > tamano || y > tamano){
+        printf("Coordenadas fuera de los límites.\n");
+        return NULL;
+    }
+    for(int i = x-5; i<x+5; i++){
+        for(int j = y-5; j<y+5; j++){
+            if(i >= 0 && j >= 0 && i <= tamano && j <= tamano){
+                if(tablero[i][j] == NULL){
+                    tablero[i][j] = (void *)1;
+                }
+                else if(tablero[i][j] == (void *)3){
+                    tablero[i][j] = (void *)2;
+
+                }
+            }
+        }
+    }
+
+    indicador = verificarBarcosRestantes(tamano);
+    if (indicador == false) {
+        printf("TODOS LOS BARCOS DESTRUIDOS , DEFENZA EXITOSA!\n");
+        return NULL;
     }
 }
