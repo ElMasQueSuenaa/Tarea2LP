@@ -41,7 +41,7 @@ int main(int argc, char const *argv[]){
 
     while(i <= turnos){
         printf("Turno %d de %d\n", i, turnos);
-        mostrarTablero(tamano);
+        mostrarTablero();
         mostrarMazo();
         usarCarta();
 
