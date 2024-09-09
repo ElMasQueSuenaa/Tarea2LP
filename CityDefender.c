@@ -37,31 +37,26 @@ int main(int argc, char const *argv[]){
 
     inicializarTablero(tamano);
     inicializarMazo();
-    colocarBarcosAleatorio(tamano);
+    colocarBarcos(tamano);
 
     while(i <= turnos){
         printf("Turno %d de %d\n", i, turnos);
         mostrarTablero();
         mostrarMazo();
         usarCarta();
-
-        // Incrementa el turno
         i++;
-
-        // Verificar si quedan barcos
-        if (!verificarBarcosRestantes(tamano)) {
+        int hayBarcos = verificarBarcosRestantes(tamano);
+        if (hayBarcos == 0) {
             printf("¡Todos los barcos han sido hundidos! ¡Has ganado!\n");
             break;
         }
     }
 
-    // Mensaje si se acaban los turnos
     if (i > turnos) {
         printf("Se acabaron los turnos. ¡Juego terminado!\n");
     }
 
-    // Liberar memoria al final
-    liberarTablero(tamano);
+    borrarTablero(tamano);
     free(Cartas.carta);
 
     return 0;

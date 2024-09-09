@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
+
 #include "Cartas.h"
 #include "Tablero.h"
 
@@ -9,9 +11,9 @@ extern int tamano;
 void inicializarTablero(int tamano){
     tablero = (void ***)malloc(tamano * sizeof(void **));
     for(int i=0; i < tamano; i++){
-        tablero[i] = (void **)malloc(tamano * sizeof(void *))
+        tablero[i] = (void **)malloc(tamano * sizeof(void *));
         for(int j=0; j < tamano; j++){
-            tablero[i][j]=NULL
+            tablero[i][j]=NULL;
         }
     }
 }
@@ -51,7 +53,6 @@ int barcohelp(int x, int y, int tamanoBarco, int orientacion, int tamanoTablero)
                 return 0;
             }
         } 
-        else {
         if (x + tamanoBarco > tamanoTablero){
             return 0;
         }
@@ -62,37 +63,42 @@ int barcohelp(int x, int y, int tamanoBarco, int orientacion, int tamanoTablero)
         }
     }
     return 1;
-    }
 }
 
 void colocarBarcos(int tamano) {
     srand(time(NULL));
+    int *barcos;
     int numBarcos;
-    if(tamano == 11){
-        int barcos[] = {2, 2, 3, 4, 5};
+
+    if (tamano == 11) {
+        static int barcos11[] = {2, 2, 3, 4, 5};
+        barcos = barcos11;
         numBarcos = 5;
     }
-    else if(tamano == 17){
-        int barcos[] = {2, 2, 2, 3, 3, 4, 5};
+    else if (tamano == 17) {
+        static int barcos17[] = {2, 2, 2, 3, 3, 4, 5};
+        barcos = barcos17;
         numBarcos = 7;
     }
-    else if(tamano == 21){
-        int barcos[] = {2, 2, 2, 3, 3, 4, 4, 5, 5};
+    else if (tamano == 21) {
+        static int barcos21[] = {2, 2, 2, 3, 3, 4, 4, 5, 5};
+        barcos = barcos21;
         numBarcos = 9;
     }
-
+    
     for (int i = 0; i < numBarcos; i++) {
         int colocado = 0;
         while (!colocado) {
             int orientacion = rand() % 2; 
             int x = rand() % tamano;
             int y = rand() % tamano;
+
             if (barcohelp(x, y, barcos[i], orientacion, tamano)) {
                 for (int j = 0; j < barcos[i]; j++) {
-                    if (orientacion == 0) {
-                        tablero[x][y + j] = (void *)3;
+                    if (orientacion == 0) { 
+                        tablero[y][x + j] = (void *)3;
                     } else {
-                        tablero[x + j][y] = (void *)3;
+                        tablero[y + j][x] = (void *)3;
                     }
                 }
                 colocado = 1;
