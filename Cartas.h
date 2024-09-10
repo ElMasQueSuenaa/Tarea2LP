@@ -8,6 +8,7 @@ typedef struct Mano
 } Mano;
 
 extern Mano Cartas;
+extern int tamano;
 void inicializarMazo();
 void mostrarMazo();
 void usarCarta();

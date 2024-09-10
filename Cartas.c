@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "Cartas.h"
 #include "Tablero.h"
 
 
 extern void ***tablero;
-extern int tamano;
-extern Mano Cartas;
+int tamano;
+Mano Cartas;
 
 void inicializarMazo(){
     Cartas.carta = (void **)malloc(5 * sizeof(void *));
@@ -84,7 +85,7 @@ int verificarBarcosRestantes(int tamano) {
 
 void *disparoSimple(int x, int y) {
     int indicador;
-    if (x < 0 || y < 0 || x > tamano || y > tamano) {
+    if (x < 0 || y < 0 || x >= tamano || y >= tamano) {
         printf("Coordenadas fuera de los límites.\n");
         return NULL;
     }
@@ -94,9 +95,9 @@ void *disparoSimple(int x, int y) {
         printf("MISS!\n");
     } else if (tablero[x][y] == (void *)3) {
         tablero[x][y] = (void *)2;
-        printf("HIT!\n", x, y);
+        printf("HIT!\n");
     } else if (tablero[x][y] == (void *)1 || tablero[x][y] == (void *)2) {
-        printf("Ya se ha disparado aquí antes, perdiste el turno.\n", x, y);
+        printf("Ya se ha disparado aquí antes, perdiste el turno.\n");
     }
     indicador = verificarBarcosRestantes(tamano);
     if (indicador == 0) {

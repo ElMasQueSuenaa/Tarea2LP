@@ -14,7 +14,6 @@ int main(int argc, char const *argv[]){
     printf("3. Dificil -> 21 X 21 , 9 Barcos\n");
     printf("Ingrese un número: ");
     scanf("%d", &dificultad);
-
     if(dificultad == 1){
         tamano = 11;
         barcos = 5;
@@ -34,10 +33,8 @@ int main(int argc, char const *argv[]){
         printf("Dificultad inválida\n");
         return 0;
     }
-
     inicializarTablero(tamano);
     inicializarMazo();
-    colocarBarcos(tamano);
 
     while(i <= turnos){
         printf("Turno %d de %d\n", i, turnos);
