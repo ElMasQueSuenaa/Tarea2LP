@@ -1,15 +1,15 @@
 all: CityDefender
 
-CityDefender: CityDefender.o Tablero.o Cartas.o
+CityDefender: CityDefender.o Tablero.o Cartas.o 
 	gcc -o CityDefender CityDefender.o Tablero.o Cartas.o 
 
 CityDefender.o: CityDefender.c Tablero.h Cartas.h
 	gcc -c CityDefender.c
 
-Tablero.o: Tablero.c Tablero.h
+Tablero.o: Tablero.c Tablero.h Cartas.h 
 	gcc -c Tablero.c
 
-Cartas.o: Cartas.c Cartas.h Tablero.h
+Cartas.o: Cartas.c Cartas.h Tablero.h 
 	gcc -c Cartas.c
 
 Wall: CityDefender.o Tablero.o Cartas.o

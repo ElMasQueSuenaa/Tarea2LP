@@ -7,13 +7,14 @@ typedef struct Mano
     int disponibles;
 } Mano;
 
-extern Mano Cartas;
+extern void ***tablero;
 extern int tamano;
+extern int turno;
+extern Mano Cartas;
 void inicializarMazo();
 void mostrarMazo();
 void usarCarta();
 
-int verificarBarcosRestantes(int tamano);
 void * disparoSimple(int x, int y);
 void * disparoGrande(int x, int y);
 void * disparoLineal(int x, int y);

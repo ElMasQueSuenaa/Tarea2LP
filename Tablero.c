@@ -6,47 +6,39 @@
 #include "Tablero.h"
 
 void ***tablero;
-int tamano;
+int **matrizBarcos;
 
 typedef struct {
-    int tamano;
+    int tamanobarco;
     int orientacion;
 } Barco;
 
-int barcohelp(int fila, int columna, int tamanoBarco, int orientacion, int tamanoTablero) {
-    if (orientacion == 0) { 
-        for (int i = 0; i < tamanoBarco; i++) {
-            if (tablero[fila][columna + i] != NULL) {
-                return 0; 
-            }
-        }
-    } else {
-        for (int i = 0; i < tamanoBarco; i++) {
-            if (tablero[fila + i][columna] != NULL) {
-                return 0;
-            }
-        }
-    }
-    return 1;
-}
-
 void inicializarTablero(int tamano) {
     tablero = (void ***)malloc(tamano * sizeof(void **));
-    if (tablero == NULL) {
-        printf("Error al asignar memoria para el tablero\n");
+    matrizBarcos = (int **)malloc(tamano * sizeof(int *));
+
+    if (tablero == NULL || matrizBarcos == NULL) {
+        printf("Error al asignar memoria para el tablero o la matriz de barcos\n");
         exit(1);
     }
 
     for (int i = 0; i < tamano; i++) {
         tablero[i] = (void **)malloc(tamano * sizeof(void *));
-        if (tablero[i] == NULL) {
+        matrizBarcos[i] = (int *)malloc(tamano * sizeof(int));
+
+        if (tablero[i] == NULL || matrizBarcos[i] == NULL) {
             printf("Error al asignar memoria para la fila %d\n", i);
             exit(1);
         }
+
         for (int j = 0; j < tamano; j++) {
             tablero[i][j] = NULL;
+            matrizBarcos[i][j] = 0; 
         }
     }
+}
+
+void colocarBarcos() {
     int *barcos;
     int numBarcos;
 
@@ -67,15 +59,16 @@ void inicializarTablero(int tamano) {
     for (int i = 0; i < numBarcos; i++) {
         int colocado = 0;
         while (!colocado) {
-            int orientacion = rand() % 2;
+            int orientacion = rand() % 2; 
             int fila = rand() % tamano;
             int columna = rand() % tamano;
-            if ((orientacion == 0 && columna + barcos[i] <= tamano) ||  
-                (orientacion == 1 && fila + barcos[i] <= tamano)) {  
+
+            if ((orientacion == 0 && columna + barcos[i] <= tamano) ||
+                (orientacion == 1 && fila + barcos[i] <= tamano)) {
                 int espacioLibre = 1;
                 for (int j = 0; j < barcos[i]; j++) {
-                    if ((orientacion == 0 && tablero[fila][columna + j] != NULL) ||  
-                        (orientacion == 1 && tablero[fila + j][columna] != NULL)) { 
+                    if ((orientacion == 0 && matrizBarcos[fila][columna + j] != 0) || 
+                        (orientacion == 1 && matrizBarcos[fila + j][columna] != 0)) {  
                         espacioLibre = 0;
                         break;
                     }
@@ -83,50 +76,71 @@ void inicializarTablero(int tamano) {
 
                 if (espacioLibre) {
                     for (int j = 0; j < barcos[i]; j++) {
-                        if (orientacion == 0) {  
-                            tablero[fila][columna + j] = malloc(sizeof(Barco));
+                        if (orientacion == 0) {
+                            tablero[fila][columna + j] = malloc(sizeof(int)); 
+                            matrizBarcos[fila][columna + j] = 1; 
                         } else {
-                            tablero[fila + j][columna] = malloc(sizeof(Barco));
+                            tablero[fila + j][columna] = malloc(sizeof(int));
+                            matrizBarcos[fila + j][columna] = 1;
                         }
                     }
-                    colocado = 1; 
+                    printf("Barco de tamaño %d colocado.\n", barcos[i]);
+                    colocado = 1;
                 }
             }
         }
     }
 }
 
-void mostrarTablero(int tamano) {
+void mostrarTablero() {
+    printf("El tamaño del tablero es: %d\n", tamano);
+
     printf("Tablero:\n");
     for (int i = 0; i < tamano; i++) {
         for (int j = 0; j < tamano; j++) {
-            if (tablero[i][j] == NULL) {
-                printf(" ~ ");
-            } else {
-                printf(" B ");
+            if(turno == 1){
+                printf("~ |");
             }
-            if (j < tamano - 1) {
-                printf("|");
+            else if (tablero[i][j] == NULL) {
+                // Casilla vacía y no se ha disparado
+                printf(" ~ ");  
+            } else if (tablero[i][j] == (void *)1) {
+                // Disparo fallido (sin barco)
+                printf(" X ");  
+            } else if (tablero[i][j] == (void *)2) {
+                // Disparo acertado (barco alcanzado)
+                printf(" O ");  
             }
+            // Si lo deseas, puedes mostrar los barcos ocultos (para depuración):
+            else if (matrizBarcos[i][j] == 1) {
+                 printf(" B ");  // Barco no alcanzado (mostrar solo en depuración o al final del juego)
+            }
+
         }
-        printf("\n");
-        if (i < tamano - 1) {
-            for (int k = 0; k < tamano; k++) {
-                printf("----");
+        printf("\n"); 
+    }
+    fflush(stdout);
+}
+
+
+void borrarTablero(int tamano){
+    for (int i = 0; i < tamano; i++) {
+        for (int j = 0; j < tamano; j++) {
+        if (tablero[i][j] != NULL) {
+            free(tablero[i][j]);
             }
-            printf("\n");
         }
     }
 }
 
-void borrarTablero(int tamano){
-    for (int i = 0; i < tamanoTablero; i++) {
-    for (int j = 0; j < tamanoTablero; j++) {
-        if (tablero[i][j] != NULL) {
-            free(tablero[i][j]);
+int verificarBarcosRestantes(){
+    for (int i = 0; i < tamano; i++){
+        for (int j = 0; j < tamano; j++){
+            if (matrizBarcos[i][j] == 1){
+                printf("Quedan barcos en el tablero.\n");
+                return 1;
+            }
         }
     }
-    free(tablero[i]);
-}
-free(tablero); 
+    return 0;
 }

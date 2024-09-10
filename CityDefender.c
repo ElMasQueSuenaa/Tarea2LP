@@ -1,10 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include "Cartas.h"
 #include "Tablero.h"
 
+int tamano;
+int turno = 1;
 int main(int argc, char const *argv[]){
-    int tamano, barcos, turnos, dificultad;
+    srand(time(0));
+    int turnos, barcos, dificultad, hayBarcos = 1;
     int x, y, cartaSeleccionada;
     int i = 1;
 
@@ -36,22 +40,16 @@ int main(int argc, char const *argv[]){
     inicializarTablero(tamano);
     inicializarMazo();
 
-    while(i <= turnos){
-        printf("Turno %d de %d\n", i, turnos);
+    while(turno <= turnos){
+        printf("Turno %d de %d\n",turno, turnos);
         mostrarTablero();
         mostrarMazo();
         usarCarta();
-        i++;
-        int hayBarcos = verificarBarcosRestantes(tamano);
-        if (hayBarcos == 0) {
-            printf("¡Todos los barcos han sido hundidos! ¡Has ganado!\n");
-            break;
-        }
+        hayBarcos = verificarBarcosRestantes();
+        turno++;
     }
 
-    if (i > turnos) {
-        printf("Se acabaron los turnos. ¡Juego terminado!\n");
-    }
+    printf("Se acabaron los turnos. ¡Juego terminado!\n");
 
     borrarTablero(tamano);
     free(Cartas.carta);
