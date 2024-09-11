@@ -6,10 +6,28 @@
 
 int tamano;
 int turno = 1;
+void mostrarGuiaCoordenadas() {
+    printf("Guía de Coordenadas del Tablero:\n");
+    printf("------------------------------------------------\n");
+    printf("El tablero está organizado en un sistema de coordenadas.\n");
+    printf("Las filas se identifican con el eje X (de arriba hacia abajo).\n");
+    printf("Las columnas se identifican con el eje Y (de izquierda a derecha).\n");
+    printf("------------------------------------------------\n");
+    printf("Por ejemplo:\n");
+    printf("  - (0, 0) es la primera fila y la primera columna (esquina superior izquierda).\n");
+    printf("  - (0, Y) es la primera fila, con Y variando de 0 a %d (horizontal).\n", tamano - 1);
+    printf("  - (X, 0) es la primera columna, con X variando de 0 a %d (vertical).\n", tamano - 1);
+    printf("  - (X, Y) son las coordenadas generales donde X es la fila y Y es la columna.\n");
+    printf("------------------------------------------------\n");
+    printf("Para disparar, selecciona una fila (X) y una columna (Y).\n");
+    printf("Por ejemplo, ingresar 5 7 significa disparar en la fila 5, columna 7.\n");
+    printf("------------------------------------------------\n");
+}
+
 int main(int argc, char const *argv[]){
     srand(time(0));
     int turnos, barcos, dificultad, hayBarcos = 1;
-    int x, y, cartaSeleccionada;
+    int x, y, cartaSeleccionada, ayuda;
     int i = 1;
 
     printf("Seleccione la dificultad:\n");
@@ -37,9 +55,17 @@ int main(int argc, char const *argv[]){
         printf("Dificultad inválida\n");
         return 0;
     }
+    printf("Necesitas ayuda con ubicarte en el tablero? 1. Si 2. No\n");
+    scanf("%d", &ayuda);
+    if(ayuda == 1){
+        mostrarGuiaCoordenadas();
+    }
     inicializarTablero(tamano);
+    colocarBarcos();
     inicializarMazo();
-
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    printf("Las coordenadas válidas para este tablero van de (0, 0) a (%d, %d).\n", tamano - 1, tamano - 1);
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
     while(turno <= turnos){
         printf("Turno %d de %d\n",turno, turnos);
         mostrarTablero();
@@ -48,9 +74,14 @@ int main(int argc, char const *argv[]){
         hayBarcos = verificarBarcosRestantes();
         turno++;
     }
-
     printf("Se acabaron los turnos. ¡Juego terminado!\n");
-
+    if(hayBarcos == 1){
+        printf("Perdiste, quedaron barcos en el tablero.\n");
+        mostrarTableroPerderdor();
+    }
+    else{
+        printf("Ganaste, no quedaron barcos en el tablero.\n");
+    }
     borrarTablero(tamano);
     free(Cartas.carta);
 

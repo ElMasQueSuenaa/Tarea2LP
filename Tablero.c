@@ -78,13 +78,12 @@ void colocarBarcos() {
                     for (int j = 0; j < barcos[i]; j++) {
                         if (orientacion == 0) {
                             tablero[fila][columna + j] = malloc(sizeof(int)); 
-                            matrizBarcos[fila][columna + j] = 1; 
+                            matrizBarcos[fila][columna + j] = 1;
                         } else {
                             tablero[fila + j][columna] = malloc(sizeof(int));
                             matrizBarcos[fila + j][columna] = 1;
                         }
                     }
-                    printf("Barco de tamaño %d colocado.\n", barcos[i]);
                     colocado = 1;
                 }
             }
@@ -94,26 +93,21 @@ void colocarBarcos() {
 
 void mostrarTablero() {
     printf("El tamaño del tablero es: %d\n", tamano);
-
     printf("Tablero:\n");
     for (int i = 0; i < tamano; i++) {
         for (int j = 0; j < tamano; j++) {
             if(turno == 1){
-                printf("~ |");
+                printf(" ~ ");
             }
             else if (tablero[i][j] == NULL) {
-                // Casilla vacía y no se ha disparado
                 printf(" ~ ");  
             } else if (tablero[i][j] == (void *)1) {
-                // Disparo fallido (sin barco)
                 printf(" X ");  
             } else if (tablero[i][j] == (void *)2) {
-                // Disparo acertado (barco alcanzado)
                 printf(" O ");  
             }
-            // Si lo deseas, puedes mostrar los barcos ocultos (para depuración):
             else if (matrizBarcos[i][j] == 1) {
-                 printf(" B ");  // Barco no alcanzado (mostrar solo en depuración o al final del juego)
+              printf(" ~ ");
             }
 
         }
@@ -143,4 +137,30 @@ int verificarBarcosRestantes(){
         }
     }
     return 0;
+}
+
+void mostrarTableroPerderdor() {
+    printf("El tamaño del tablero es: %d\n", tamano);
+
+    printf("Tablero:\n");
+    for (int i = 0; i < tamano; i++) {
+        for (int j = 0; j < tamano; j++) {
+            if(turno == 1){
+                printf(" ~ ");
+            }
+            else if (tablero[i][j] == NULL) {
+                printf(" ~ ");  
+            } else if (tablero[i][j] == (void *)1) {
+                printf(" X ");  
+            } else if (tablero[i][j] == (void *)2) {
+                printf(" O ");  
+            }
+            else if (matrizBarcos[i][j] == 1) {
+              printf(" B ");
+            }
+
+        }
+        printf("\n"); 
+    }
+    fflush(stdout);
 }

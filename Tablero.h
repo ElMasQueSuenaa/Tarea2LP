@@ -9,4 +9,5 @@ void mostrarTablero();
 int verificarBarcosRestantes();
 void borrarTablero(int tamano);
 int barcohelp(int x, int y, int tamanoBarco, int orientacion, int tamanoTablero);
+void mostrarTableroPerderdor();
 #endif
