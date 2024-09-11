@@ -89,11 +89,11 @@ void colocarBarcos() {
 
     for (int i = 0; i < numBarcos; i++) {
         int colocado = 0;
+
         while (!colocado) {
-            int orientacion = rand() % 2; 
+            int orientacion = rand() % 2;
             int fila = rand() % tamano;
             int columna = rand() % tamano;
-
             if ((orientacion == 0 && columna + barcos[i] <= tamano) ||
                 (orientacion == 1 && fila + barcos[i] <= tamano)) {
                 int espacioLibre = 1;
@@ -104,10 +104,9 @@ void colocarBarcos() {
                         break;
                     }
                 }
-
                 if (espacioLibre) {
                     for (int j = 0; j < barcos[i]; j++) {
-                        if (orientacion == 0) { 
+                        if (orientacion == 0) {
                             tablero[fila][columna + j] = malloc(sizeof(int));
                             matrizBarcos[fila][columna + j] = 1;
                         } else {
@@ -115,8 +114,8 @@ void colocarBarcos() {
                             matrizBarcos[fila + j][columna] = 1;
                         }
                     }
-                }
                     colocado = 1;
+                }
             }
         }
     }
