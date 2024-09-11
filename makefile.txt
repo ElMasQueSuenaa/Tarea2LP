@@ -1,22 +1,40 @@
-all: CityDefender
+# Nombre del ejecutable
+EXEC = CityDefender
 
-CityDefender: CityDefender.o Tablero.o Cartas.o 
-	gcc -o CityDefender CityDefender.o Tablero.o Cartas.o 
+# Archivos fuente
+SRCS = CityDefender.c Tablero.c Cartas.c
 
+# Archivos objeto generados
+OBJS = CityDefender.o Tablero.o Cartas.o
+
+# Compilador
+CC = gcc
+
+# Flags del compilador
+CFLAGS = -Wall -Werror
+
+# Regla para compilar el ejecutable
+all: $(EXEC)
+
+# Regla para compilar y enlazar el ejecutable
+$(EXEC): $(OBJS)
+	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
+
+# Reglas para compilar cada archivo objeto
 CityDefender.o: CityDefender.c Tablero.h Cartas.h
-	gcc -c CityDefender.c
+	$(CC) $(CFLAGS) -c CityDefender.c
 
-Tablero.o: Tablero.c Tablero.h Cartas.h 
-	gcc -c Tablero.c
+Tablero.o: Tablero.c Tablero.h
+	$(CC) $(CFLAGS) -c Tablero.c
 
-Cartas.o: Cartas.c Cartas.h Tablero.h 
-	gcc -c Cartas.c
+Cartas.o: Cartas.c Cartas.h Tablero.h
+	$(CC) $(CFLAGS) -c Cartas.c
 
-Wall: CityDefender.o Tablero.o Cartas.o
-	gcc -Wall -Werror -o CityDefender CityDefender.o Tablero.o Cartas.o
+# Regla para ejecutar Valgrind
+valgrind: $(EXEC)
+	valgrind --leak-check=full --show-leak-kinds=all ./$(EXEC)
 
-Val: CityDefender
-	valgrind --leak-check=full --show-leak-kinds=all ./CityDefender
-
+# Limpiar archivos objeto y el ejecutable
 clean:
-	rm -f CityDefender.o Tablero.o Cartas.o CityDefender
+	rm -f $(OBJS) $(EXEC)
+

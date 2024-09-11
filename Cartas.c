@@ -248,7 +248,6 @@ void *disparoLineal(int x, int y){
     basado en una probabilidad aleatoria.
     */
     int temp = 0;
-    int indicador;
     int orientacion;
     if(x < 0 || y < 0 || x > tamano || y > tamano){
         printf("Coordenadas fuera de los límites.\n");
@@ -327,7 +326,6 @@ void* disparoRadar(int x, int y){
     un mensaje de éxito. Finalmente, la función retorna el tipo de disparo que se usará 
     en el próximo turno, basado en una probabilidad aleatoria.
     */
-    int indicador;
     int temp = 0; 
     if(x < 0 || y < 0 || x > tamano || y > tamano){
         printf("Coordenadas fuera de los límites.\n");
@@ -404,4 +402,5 @@ void* disparo500KG(int x, int y){
             }
         }
     }
+    return NULL;
 }

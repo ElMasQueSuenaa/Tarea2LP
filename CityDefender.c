@@ -35,9 +35,8 @@ void mostrarGuiaCoordenadas() {
 
 int main(int argc, char const *argv[]){
     srand(time(0));
-    int turnos, barcos, dificultad, hayBarcos = 1;
-    int x, y, cartaSeleccionada, ayuda;
-    int i = 1;
+    int turnos, dificultad, hayBarcos = 1;
+    int ayuda;
 
     printf("Seleccione la dificultad:\n");
     printf("1. Facil -> 11 X 11 , 5 Barcos\n");
@@ -47,17 +46,14 @@ int main(int argc, char const *argv[]){
     scanf("%d", &dificultad);
     if(dificultad == 1){
         tamano = 11;
-        barcos = 5;
         turnos = 20;
     }
     else if(dificultad == 2){
         tamano = 17;
-        barcos = 7;
         turnos = 30;
     }
     else if(dificultad == 3){
         tamano = 21;
-        barcos = 9;
         turnos = 40;
     }
     else{

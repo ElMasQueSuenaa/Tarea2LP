@@ -107,16 +107,16 @@ void colocarBarcos() {
 
                 if (espacioLibre) {
                     for (int j = 0; j < barcos[i]; j++) {
-                        if (orientacion == 0) {
-                            tablero[fila][columna + j] = malloc(sizeof(int)); 
+                        if (orientacion == 0) { 
+                            tablero[fila][columna + j] = malloc(sizeof(int));
                             matrizBarcos[fila][columna + j] = 1;
                         } else {
                             tablero[fila + j][columna] = malloc(sizeof(int));
                             matrizBarcos[fila + j][columna] = 1;
                         }
                     }
-                    colocado = 1;
                 }
+                    colocado = 1;
             }
         }
     }
@@ -182,12 +182,19 @@ void borrarTablero(int tamano){
     libera la memoria correspondiente. Esto evita fugas de memoria al final del juego.
     */
 
-    for (int i = 0; i < tamano; i++) {
-        for (int j = 0; j < tamano; j++) {
-        if (tablero[i][j] != NULL) {
-            free(tablero[i][j]);
+    if (tablero != NULL) {
+        for (int i = 0; i < tamano; i++) {
+            if (tablero[i] != NULL) {
+                for (int j = 0; j < tamano; j++) {
+                    if (tablero[i][j] != NULL) {
+                        free(tablero[i][j]);
+                    }
+                }
+                free(tablero[i]);
             }
         }
+        free(tablero);
+        tablero = NULL;
     }
 }
 
