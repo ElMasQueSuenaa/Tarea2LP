@@ -11,6 +11,21 @@ extern int tamano;
 Mano Cartas;
 
 void inicializarMazo(){
+    /*
+    Función: inicializarMazo
+
+    Parámetros:
+    - Ninguno. La función utiliza variables globales como `Cartas` para manejar el mazo.
+
+    Retorna:
+    - No retorna ningún valor explícito.
+
+    Descripción:
+    Esta función inicializa el mazo de cartas al comienzo del juego. 
+    Asigna memoria dinámica para almacenar 5 cartas, todas ellas inicialmente 
+    del tipo `disparoSimple`. También actualiza el número de cartas disponibles 
+    en el mazo, estableciendo un total de 5 cartas.
+    */
     Cartas.carta = (void **)malloc(5 * sizeof(void *));
     for(int i = 0; i<5; i++){
         Cartas.carta[i] = disparoSimple;
@@ -19,6 +34,21 @@ void inicializarMazo(){
 }
 
 void mostrarMazo(){
+    /*
+    Función: mostrarMazo()
+    
+    Parámetros:
+    - Ninguno. La función utiliza variables globales como `Cartas` para manejar el mazo.
+
+    Retorna:
+    - No retorna un valor explícito.
+
+    Descripción:
+    La función inicializa el marzo de cartas de forma dinamica.
+    Se solicita memoria para 5 cartas y se asigna la función disparoSimple a cada una.
+    Se inicializa el contador de cartas disponibles en 5.
+    *
+    */
     printf("Cartas disponibles: \n");
     for(int i = 0; i<Cartas.disponibles; i++){
         if(Cartas.carta[i] == disparoSimple){
@@ -41,6 +71,23 @@ void mostrarMazo(){
 }
 
 void usarCarta() {
+    /*
+    Función: usarCarta
+
+    Parámetros:
+    - Ninguno. La función utiliza variables globales como `Cartas` para manejar el mazo.
+
+    Retorna:
+    - No retorna un valor explícito. 
+    - Termina el turno si no hay cartas disponibles o si se elige una carta inválida.
+
+    Descripción:
+    Esta función permite al jugador usar una carta del mazo disponible. 
+    Solicita al jugador que seleccione una carta, luego pide las coordenadas 
+    (x, y) para aplicar el efecto de la carta (como disparo simple, grande, etc.).
+    Una vez usada, la carta es removida del mazo. Si la carta usada genera 
+    una nueva carta, esta se añade al mazo.
+    */
     int cartaSeleccionada;
     int x, y;
     if (Cartas.disponibles == 0) {
@@ -74,6 +121,24 @@ void usarCarta() {
 }
 
 void *disparoSimple(int x, int y) {
+    /*
+    Función: disparoSimple
+
+    Parámetros:
+    - x: int. Coordenada X (fila) donde se desea disparar.
+    - y: int. Coordenada Y (columna) donde se desea disparar.
+
+    Retorna:
+    - Retorna un puntero a la función correspondiente al siguiente tipo de disparo (disparoSimple, disparoGrande, disparoLineal, disparoRadar).
+    - Retorna NULL si las coordenadas están fuera de los límites o si ya se ha disparado en esa posición previamente.
+
+    Descripción:
+    Esta función realiza un disparo en una única coordenada `(x, y)` del tablero. Si el disparo
+    acierta un barco, lo marca como un "HIT". Si no hay barco en la posición, lo marca como "MISS".
+    La función también determina si ya se ha disparado en esa posición y, si es así, cancela el disparo.
+    Al final, en función de una probabilidad aleatoria, la función devuelve el tipo de disparo que
+    se realizará en el próximo turno.
+    */
     if (x < 0 || y < 0 || x >= tamano || y >= tamano) {
         printf("Coordenadas fuera de los límites.\n");
         return NULL;
@@ -103,6 +168,23 @@ void *disparoSimple(int x, int y) {
 }
 
 void *disparoGrande(int x, int y){
+    /*
+    Función: disparoGrande
+
+    Parámetros:
+    - x: int. Coordenada X (fila) donde se desea disparar.
+    - y: int. Coordenada Y (columna) donde se desea disparar.
+
+    Retorna:
+    - Retorna un puntero a la función correspondiente al siguiente tipo de disparo.
+    - Retorna NULL si las coordenadas están fuera de los límites del tablero.
+
+    Descripción:
+    Esta función realiza un disparo en un área de 3x3 alrededor de la coordenada `(x, y)`.
+    Si alguno de los disparos acierta un barco, lo marca como "HIT" en el tablero y en la matriz 
+    de barcos. Si no hay barcos en las posiciones, se marca como "MISS". La función también
+    decide aleatoriamente el tipo de disparo que se ejecutará en el siguiente turno.
+    */
     int temp = 0;
     if(x < 0 || y < 0 || x > tamano || y > tamano){
         printf("Coordenadas fuera de los límites.\n");
@@ -146,6 +228,25 @@ void *disparoGrande(int x, int y){
 }
 
 void *disparoLineal(int x, int y){
+    /*
+    Función: disparoLineal
+
+    Parámetros:
+    - x: int. Coordenada X (fila) donde se desea disparar.
+    - y: int. Coordenada Y (columna) donde se desea disparar.
+
+    Retorna:
+    - Retorna un puntero a la función correspondiente al siguiente tipo de disparo.
+    - Retorna NULL si las coordenadas están fuera de los límites del tablero.
+
+    Descripción:
+    Esta función realiza un disparo en línea recta, ya sea horizontalmente o verticalmente,
+    afectando un área de 5 casillas (2 hacia cada lado de la coordenada `(x, y)`).
+    El jugador selecciona la orientación (horizontal o vertical) antes de realizar el disparo.
+    Luego, se verifica si hay barcos en esas posiciones, marcando "HIT" o "MISS".
+    Finalmente, se determina el tipo de disparo que se realizará en el próximo turno,
+    basado en una probabilidad aleatoria.
+    */
     int temp = 0;
     int indicador;
     int orientacion;
@@ -208,6 +309,24 @@ void *disparoLineal(int x, int y){
 }
 
 void* disparoRadar(int x, int y){
+    /*
+    Función: disparoRadar
+
+    Parámetros:
+    - x: int. Coordenada X (fila) donde se desea realizar el escaneo.
+    - y: int. Coordenada Y (columna) donde se desea realizar el escaneo.
+
+    Retorna:
+    - Retorna un puntero a la función correspondiente al siguiente tipo de disparo.
+    - Retorna NULL si las coordenadas están fuera de los límites del tablero.
+
+    Descripción:
+    Esta función simula el comportamiento de un radar, escaneando un área de 5x5 alrededor 
+    de la coordenada `(x, y)` (incluyendo la coordenada central). El radar no dispara, 
+    solo detecta si hay barcos en las cercanías. Si encuentra al menos un barco, imprime 
+    un mensaje de éxito. Finalmente, la función retorna el tipo de disparo que se usará 
+    en el próximo turno, basado en una probabilidad aleatoria.
+    */
     int indicador;
     int temp = 0; 
     if(x < 0 || y < 0 || x > tamano || y > tamano){
@@ -251,6 +370,23 @@ void* disparoRadar(int x, int y){
 }
 
 void* disparo500KG(int x, int y){
+    /*
+    Función: disparo500KG
+
+    Parámetros:
+    - x: int. Coordenada X (fila) donde se desea realizar el disparo.
+    - y: int. Coordenada Y (columna) donde se desea realizar el disparo.
+
+    Retorna:
+    - No retorna ningún tipo de disparo (disparo único, no genera más disparos).
+    - Retorna NULL si las coordenadas están fuera de los límites del tablero.
+
+    Descripción:
+    Esta función simula el disparo de una bomba de 500KG que impacta un área grande de 11x11 
+    alrededor de las coordenadas `(x, y)`. Afecta un rango de 5 casillas hacia todas las direcciones 
+    desde las coordenadas centrales, verificando si hay barcos en esas posiciones. Si encuentra barcos, 
+    los marca como "HIT" y actualiza tanto el tablero como la matriz de barcos.
+    */
     if(x < 0 || y < 0 || x > tamano || y > tamano){
         printf("Coordenadas fuera de los límites.\n");
         return NULL;

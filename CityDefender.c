@@ -6,7 +6,16 @@
 
 int tamano;
 int turno = 1;
+
+
 void mostrarGuiaCoordenadas() {
+    /**
+    *
+    * La función imprime en pantalla una guía que explica cómo se organizan las coordenadas en el tablero.
+    * Si es que el jugador así lo desea.
+    * Como comentario propio me costaba un poco ubicarme en el tablero, por lo que esta función me parece muy útil.
+    *
+    */
     printf("Guía de Coordenadas del Tablero:\n");
     printf("------------------------------------------------\n");
     printf("El tablero está organizado en un sistema de coordenadas.\n");
@@ -84,6 +93,7 @@ int main(int argc, char const *argv[]){
     }
     borrarTablero(tamano);
     free(Cartas.carta);
+    borrarMatrizBarcos();
 
     return 0;
 }

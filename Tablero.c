@@ -14,6 +14,22 @@ typedef struct {
 } Barco;
 
 void inicializarTablero(int tamano) {
+    /*
+    Función: inicializarTablero
+
+    Parámetros:
+    - tamano: int. Tamaño del tablero, tanto en filas como en columnas (tablero de tamano x tamano).
+
+    Retorna:
+    - No retorna ningún valor.
+
+    Descripción:
+    Esta función inicializa tanto el tablero del juego como la matriz que indica la ubicación de los barcos. 
+    Asigna memoria dinámica para ambas estructuras, asegurando que cada celda del tablero esté vacía al inicio 
+    y que la matriz de barcos esté preparada para recibir barcos. Si ocurre un error durante la asignación de 
+    memoria, la función detiene el programa.
+    */
+
     tablero = (void ***)malloc(tamano * sizeof(void **));
     matrizBarcos = (int **)malloc(tamano * sizeof(int *));
 
@@ -39,6 +55,21 @@ void inicializarTablero(int tamano) {
 }
 
 void colocarBarcos() {
+    /*
+    Función: colocarBarcos
+
+    Parámetros:
+    - Ninguno. La función utiliza la variable global `tamano` para determinar el tamaño del tablero.
+
+    Retorna:
+    - No retorna ningún valor.
+
+    Descripción:
+    Esta función coloca los barcos en el tablero de forma aleatoria. Dependiendo del tamaño del tablero 
+    (`tamano`), se selecciona un conjunto predefinido de barcos con diferentes longitudes. Los barcos se colocan 
+    horizontal o verticalmente en posiciones válidas del tablero, evitando la superposición de barcos.
+    La matriz `matrizBarcos` se actualiza para indicar la ubicación de los barcos.
+    */
     int *barcos;
     int numBarcos;
 
@@ -92,6 +123,24 @@ void colocarBarcos() {
 }
 
 void mostrarTablero() {
+    /*
+    Función: mostrarTablero
+
+    Parámetros:
+    - Ninguno. La función utiliza variables globales como `tamano`, `tablero` y `matrizBarcos` 
+      para mostrar el estado del tablero actual.
+
+    Retorna:
+    - No retorna ningún valor.
+
+    Descripción:
+    Esta función imprime el tablero del juego, mostrando su estado actual para cada celda. 
+    Dependiendo de si es el primer turno o no, y de los valores en el tablero y la matriz de barcos, 
+    muestra diferentes símbolos:
+    - " ~ " para una casilla sin disparos.
+    - " X " para una casilla donde se disparó, pero no había barco.
+    - " O " para una casilla donde se disparó y se acertó un barco.
+    */
     printf("El tamaño del tablero es: %d\n", tamano);
     printf("Tablero:\n");
     for (int i = 0; i < tamano; i++) {
@@ -118,6 +167,21 @@ void mostrarTablero() {
 
 
 void borrarTablero(int tamano){
+    /*
+    Función: borrarTablero
+
+    Parámetros:
+    - tamano: int. Tamaño del tablero, es decir, el número de filas y columnas (tablero de tamano x tamano).
+
+    Retorna:
+    - No retorna ningún valor.
+
+    Descripción:
+    Esta función se encarga de liberar la memoria asignada dinámicamente a cada celda del tablero. 
+    Recorre todas las posiciones del tablero y, si una celda está ocupada (es decir, no es `NULL`), 
+    libera la memoria correspondiente. Esto evita fugas de memoria al final del juego.
+    */
+
     for (int i = 0; i < tamano; i++) {
         for (int j = 0; j < tamano; j++) {
         if (tablero[i][j] != NULL) {
@@ -128,6 +192,24 @@ void borrarTablero(int tamano){
 }
 
 int verificarBarcosRestantes(){
+    /*
+    Función: verificarBarcosRestantes
+
+    Parámetros:
+    - Ninguno. La función utiliza variables globales como `tamano` y `matrizBarcos` para verificar 
+      si aún quedan barcos en el tablero.
+
+    Retorna:
+    - 1: Si aún quedan barcos en el tablero.
+    - 0: Si no quedan barcos en el tablero.
+
+    Descripción:
+    Esta función recorre la matriz de barcos (`matrizBarcos`) para verificar si aún quedan barcos en el tablero. 
+    Si encuentra alguna posición en la matriz con un barco (indicado por el valor 1), imprime un mensaje y 
+    retorna 1 para indicar que todavía quedan barcos. Si no encuentra ningún barco, retorna 0, lo que significa 
+    que todos los barcos han sido eliminados.
+    */
+
     for (int i = 0; i < tamano; i++){
         for (int j = 0; j < tamano; j++){
             if (matrizBarcos[i][j] == 1){
@@ -140,8 +222,27 @@ int verificarBarcosRestantes(){
 }
 
 void mostrarTableroPerderdor() {
-    printf("El tamaño del tablero es: %d\n", tamano);
+    /*
+    Función: mostrarTableroPerdedor
 
+    Parámetros:
+    - Ninguno. La función utiliza variables globales como `tamano`, `tablero`, `matrizBarcos`, y `turno` 
+      para mostrar el estado final del tablero después de perder el juego.
+
+    Retorna:
+    - No retorna ningún valor.
+
+    Descripción:
+    Esta función imprime el estado final del tablero una vez que el jugador ha perdido el juego. 
+    Muestra todas las posiciones de los barcos, incluidos aquellos que no fueron descubiertos por el jugador.
+    Dependiendo del estado de cada celda, imprime:
+    - " ~ " para casillas no disparadas.
+    - " X " para casillas disparadas sin barco.
+    - " O " para casillas disparadas con barco (impacto).
+    - " B " para casillas que contenían barcos no descubiertos por el jugador.
+    */
+
+    printf("El tamaño del tablero es: %d\n", tamano);
     printf("Tablero:\n");
     for (int i = 0; i < tamano; i++) {
         for (int j = 0; j < tamano; j++) {
@@ -163,4 +264,30 @@ void mostrarTableroPerderdor() {
         printf("\n"); 
     }
     fflush(stdout);
+}
+
+void borrarMatrizBarcos() {
+    /*
+    Función: borrarMatrizBarcos
+
+    Parámetros:
+    - Ninguno. La función utiliza la variable global `matrizBarcos` y `tamano`.
+
+    Retorna:
+    - No retorna ningún valor.
+
+    Descripción:
+    Esta función se encarga de liberar la memoria dinámica que fue asignada previamente a la matriz de barcos 
+    (`matrizBarcos`). Recorre todas las filas de la matriz, libera la memoria asignada a cada fila, y luego libera 
+    la memoria de la estructura principal de la matriz. Finalmente, se establece `matrizBarcos` en `NULL` para 
+    evitar accesos indebidos a memoria no válida después de liberar la matriz.
+    */
+    
+    if (matrizBarcos != NULL) {
+        for (int i = 0; i < tamano; i++) {
+            free(matrizBarcos[i]);
+        }
+        free(matrizBarcos);
+        matrizBarcos = NULL;
+    }
 }
