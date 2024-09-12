@@ -10,7 +10,13 @@ int turno = 1;
 
 void mostrarGuiaCoordenadas() {
     /**
-    *
+    Función: mostrarGuiaCoordenadas
+
+    Parámetros:
+    - Ninguno.
+
+    Retorna:
+    - No retorna ningún valor.
     * La función imprime en pantalla una guía que explica cómo se organizan las coordenadas en el tablero.
     * Si es que el jugador así lo desea.
     * Como comentario propio me costaba un poco ubicarme en el tablero, por lo que esta función me parece muy útil.
