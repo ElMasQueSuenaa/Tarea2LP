@@ -404,3 +404,36 @@ void* disparo500KG(int x, int y){
     }
     return NULL;
 }
+
+void borrarMazo() {
+    /*
+    Función: borrarMazo
+
+    Parámetros:
+    - Ninguno. Utiliza la variable global `Cartas`.
+
+    Retorna:
+    - No retorna ningún valor.
+
+    Descripción:
+    Esta función libera la memoria asignada dinámicamente para las cartas en el mazo. 
+    Libera cada puntero individualmente y luego libera el array de punteros. Finalmente, 
+    se establece el puntero del array a NULL y se ajusta el número de cartas disponibles a 0.
+    */
+    
+    if (Cartas.carta != NULL) {
+        for (int i = 0; i < Cartas.disponibles; i++) {
+            if (Cartas.carta[i] != NULL) {
+                free(Cartas.carta[i]);  // Libera cada carta individual
+                Cartas.carta[i] = NULL; // Evita que el puntero apunte a memoria liberada
+            }
+        }
+
+        // Libera el array de punteros de las cartas
+        free(Cartas.carta);
+        Cartas.carta = NULL;
+
+        // Ajustar el número de cartas disponibles a 0
+        Cartas.disponibles = 0;
+    }
+}

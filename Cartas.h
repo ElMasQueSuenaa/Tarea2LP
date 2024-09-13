@@ -14,6 +14,7 @@ extern Mano Cartas;
 void inicializarMazo();
 void mostrarMazo();
 void usarCarta();
+void borrarMazo();
 
 void * disparoSimple(int x, int y);
 void * disparoGrande(int x, int y);

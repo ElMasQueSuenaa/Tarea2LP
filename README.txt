@@ -14,3 +14,5 @@ Instrucciones de compilacion:
 -Ahora para la compilación abrir la consola en la carpeta o shell de linux(shift+click derecho dentro de la carpeta), donde escribira la linea "make", seguido de "./CityDefender" donde finalmente tendra el juego CityDefender en la consola.
 
 -Para borrar los archivos generados por el makefile "make clean".
+
+-Asumí que si un disparo se realizaba en la misma parte era mala gestión del jugador el cual como penalización pierde el cañón.

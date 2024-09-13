@@ -94,8 +94,9 @@ int main(int argc, char const *argv[]){
         printf("Ganaste, no quedaron barcos en el tablero.\n");
     }
     borrarTablero(tamano);
-    free(Cartas.carta);
+    borrarMazo();   
     borrarMatrizBarcos();
+    
 
     return 0;
 }
